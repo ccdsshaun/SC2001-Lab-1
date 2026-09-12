@@ -1,5 +1,6 @@
 import math
 import random
+import time
 
 def HybridMergeSort(A, start, end, S, key_comp):
     ## Switch to Insertion Sort if size <= S
@@ -8,8 +9,8 @@ def HybridMergeSort(A, start, end, S, key_comp):
         return        ## A and key_comp are mutable
     else:
         mid = start + math.floor((end - start) / 2)
-        HybridMergeSort(A, start, mid,S ,key_comp)
-        HybridMergeSort(A, mid, end,S ,key_comp)
+        HybridMergeSort(A, start, mid, S,key_comp)
+        HybridMergeSort(A, mid, end, S,key_comp)
         Merge(A, start, mid, end, key_comp)
         return        ## A and key_comp are mutable
 
@@ -23,6 +24,16 @@ def InsertionSort(A, start, end, key_comp):
                 j -= 1
             else:
                 break  # Comparison evaluated to False; stop shifting
+
+def MergeSort(A, start, end, key_comp):
+    if end - start <= 1:
+        return
+    mid = start + math.floor((end-start)/2)
+
+    MergeSort(A, start, mid, key_comp)
+    MergeSort(A, mid, end, key_comp)
+
+    Merge (A, start, mid, end, key_comp)
 
 def Merge(A, start, mid, end, key_comp):
     i = 0
@@ -57,10 +68,58 @@ def key_comparison (arr, S):
     HybridMergeSort (arr, 0, len(arr), S, key_comp)
     return key_comp[0]
 
-# Example: generate array of size 1,000 with x = 1,000,000
-arr = generate_array(1000, 1000000)
+def HybridTest(arr, S): # Investigate the performance of the hybrid sorting algorithm in terms of CPU time and the number of key comparisos
+    A = arr.copy() # Make a copy of the array 
+    key_comp = [0] # Initialize the comparison counter
+    
+    start = time.process_time() 
+    HybridMergeSort(A, 0, len(A), S, key_comp)
+    end = time.process_time()
+    
+    cpuTime = end - start # Calculate CPU time
+    
+    return key_comp[0], cpuTime
+
+def MergeTest(arr): # Investigate the performance of Merge Sort in terms of CPU time and the number of key comparisos
+    A = arr.copy() # Make a copy of the array 
+    key_comp = [0] # Initialize the comparison counter
+    
+    start = time.process_time()
+    MergeSort(A, 0, len(A), key_comp)
+    end = time.process_time()
+    
+    cpuTime = end - start # Calculate CPU time
+    
+    return key_comp[0], cpuTime
+    
+# Example: generate array of size 10, 000, 000 with x = 1,000,000
+arr = generate_array(10000000, 1000000)
+
+# Optimal Value of S
+S = 4
 
 A = [2, 3, 4, 1]
-comparison = key_comparison (A, S=4)
+comparison = key_comparison (A, S)
 print(A)
 print("comparison:", comparison)
+
+
+print("Original version of Merge Sort")
+mergeComparison, mergeTime = MergeTest(arr)
+print(f"Number of key comparisons: {mergeComparison}")
+print(f"CPU Time: {mergeTime} seconds")
+
+print()
+
+print("Hybrid Algorithm")
+hybridComparison, hybridTime = HybridTest(arr, S)
+print(f"Number of key comparisons: {hybridComparison}")
+print(f"CPU Time: {hybridTime} seconds")
+
+print()
+
+# Comparing the peformance of the hybrid sorting algorithm and Merge Sort
+print("Algorithm \t\t Key Comparisons \t CPU Time (in s)")
+print(f"Original Merge Sort \t {mergeComparison} \t\t {mergeTime}")
+print(f"Hybrid Merge Sort \t {hybridComparison} \t\t {hybridTime}")
+
