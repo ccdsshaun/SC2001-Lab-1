@@ -13,7 +13,7 @@ def MergeSort(A, start, end):
 
     return left + right + mergeC
 
-def MergeTest(arr): # Investigate the performance of Merge Sort in terms of CPU time and the number of key comparisos
+def MergeTest(arr): # Investigate the performance of Merge Sort in terms of CPU time and the number of key comparisons
     A = arr.copy() # Make a copy of the array 
     
     start = time.process_time()
@@ -24,7 +24,7 @@ def MergeTest(arr): # Investigate the performance of Merge Sort in terms of CPU 
     
     return key_comp, cpuTime
 
-def HybridTest(arr, S): # Investigate the performance of the hybrid sorting algorithm in terms of CPU time and the number of key comparisos
+def HybridTest(arr, S): # Investigate the performance of the hybrid sorting algorithm in terms of CPU time and the number of key comparisons
     A = arr.copy() # Make a copy of the array 
 
     start = time.process_time() 
